@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Trash2, Minus, Plus, ShoppingBag, ShieldCheck } from "lucide-react"
+import { Minus, Plus } from "lucide-react"
 
 interface CartItem {
   id: string
@@ -22,7 +22,7 @@ const INITIAL_ITEMS: CartItem[] = [
     id: "vue-cartier-ct0232o-platinum",
     brand: "CARTIER",
     name: "Ct0232o Platinum",
-    price: 4890,
+    price: 890,
     image: "/images/products/vue/cartier-ct0232o-platinum.jpg",
     quantity: 1
   },
@@ -30,7 +30,7 @@ const INITIAL_ITEMS: CartItem[] = [
     id: "solaires-ray-ban-aviator-gold",
     brand: "RAY-BAN",
     name: "Aviator Gold",
-    price: 1890,
+    price: 890,
     image: "/images/products/solaires/ray-ban-aviator-gold.jpg",
     quantity: 1
   }
@@ -72,8 +72,8 @@ export default function CartPage() {
     setIsProcessing(true)
     setTimeout(() => {
       setIsProcessing(false)
-      alert("Redirection vers Stripe sécurisé...")
-    }, 1500)
+      window.location.href = "/checkout/success"
+    }, 1000)
   }
 
   return (
@@ -88,31 +88,28 @@ export default function CartPage() {
               isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
-            <div className="w-16 h-16 bg-muted border border-border/80 flex items-center justify-center mx-auto mb-6">
-              <ShoppingBag className="w-6 h-6 text-muted-foreground/60" />
-            </div>
-            <h1 className="font-serif text-3xl text-foreground font-normal mb-3">
+            <h1 className="font-serif text-3xl text-center text-foreground mb-2">
               Votre panier est vide
             </h1>
-            <p className="text-muted-foreground text-sm font-light mb-8">
-              Vous n&apos;avez pas encore ajouté de lunettes à votre sélection.
+            <p className="text-muted-foreground mb-8">
+              Découvrez nos collections
             </p>
             <Link
               href="/lunettes"
-              className="text-primary hover:text-[#965628] text-sm font-semibold tracking-wider uppercase underline underline-offset-4 hover:no-underline transition-colors"
+              className="text-primary underline hover:text-[#965628] transition-colors"
             >
               Voir les lunettes →
             </Link>
           </div>
         ) : (
           /* Cart with Items layout */
-          <div className="space-y-10">
+          <div
+            className={`space-y-10 transition-all duration-700 ease-out transform ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            }`}
+          >
             {/* Title */}
-            <div
-              className={`transition-all duration-700 ease-out transform ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
-            >
+            <div>
               <h1 className="font-serif text-4xl text-foreground font-normal text-left">
                 Mon Panier
               </h1>
@@ -122,46 +119,44 @@ export default function CartPage() {
             </div>
 
             {/* Grid Container */}
-            <div className="grid md:grid-cols-12 gap-12 lg:gap-16 items-start">
+            <div className="grid md:grid-cols-12 gap-12 items-start">
               
               {/* Left Column: Items List (col-span-8) */}
-              <div
-                className={`md:col-span-8 transition-all duration-700 ease-out transform delay-75 ${
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                }`}
-              >
-                <div className="border-t border-border/40">
+              <div className="md:col-span-8">
+                <div className="border-t border-border">
                   {cartItems.map((item) => (
-                    <div key={item.id} className="py-6 border-b border-border/40 text-left">
-                      <div className="flex gap-6 items-center">
+                    <div key={item.id} className="text-left">
+                      <div className="flex gap-6 items-center py-6">
                         
-                        {/* Item Image */}
-                        <div className="relative w-24 h-30 bg-muted flex-shrink-0 border border-border/40 overflow-hidden">
+                        {/* Image: w-24 aspect-square object-cover bg-muted */}
+                        <div className="relative w-24 aspect-square bg-muted flex-shrink-0 overflow-hidden">
                           <Image
                             src={item.image}
                             alt={`${item.brand} - ${item.name}`}
                             fill
                             sizes="96px"
-                            className="object-cover object-center w-full h-full"
+                            className="object-cover w-full h-full"
                           />
                         </div>
 
-                        {/* Item Details */}
+                        {/* Details and Actions */}
                         <div className="flex-grow flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                           <div className="space-y-1">
-                            <span className="block text-[10px] uppercase font-bold tracking-widest text-primary">
+                            {/* Brand: text-xs uppercase tracking-wider text-muted-foreground */}
+                            <span className="block text-xs uppercase tracking-wider text-muted-foreground">
                               {item.brand}
                             </span>
-                            <h3 className="font-serif text-lg text-foreground hover:text-primary transition-colors duration-200">
-                              <Link href={`/lunettes/${item.id}`}>{item.name}</Link>
+                            {/* Name: font-serif text-xl text-foreground */}
+                            <h3 className="font-serif text-xl text-foreground">
+                              <Link href={`/lunettes/${item.id}`} className="hover:text-primary transition-colors">
+                                {item.name}
+                              </Link>
                             </h3>
-                            {/* Remove Trigger */}
+                            {/* Remove: "Supprimer" text-xs text-muted-foreground hover:text-red-500 */}
                             <button
                               onClick={() => removeItem(item.id)}
-                              className="text-[11px] text-muted-foreground hover:text-red-500 transition-colors uppercase tracking-widest flex items-center gap-1.5 pt-2"
-                              aria-label="Supprimer l'article"
+                              className="text-xs text-muted-foreground hover:text-red-500 transition-colors pt-1 cursor-pointer bg-transparent border-none p-0"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
                               Supprimer
                             </button>
                           </div>
@@ -169,29 +164,29 @@ export default function CartPage() {
                           {/* Quantity & Price */}
                           <div className="flex items-center justify-between sm:justify-end gap-8">
                             
-                            {/* Quantity Controls */}
-                            <div className="flex items-center border border-border bg-background">
+                            {/* Quantity: [ - ] number [ + ] (w-8 h-8 border buttons) */}
+                            <div className="flex items-center gap-2">
                               <button
                                 onClick={() => updateQuantity(item.id, -1)}
-                                className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-[#F5F3EE]/30 active:bg-[#F5F3EE]/60 transition-colors rounded-none border-none cursor-pointer"
+                                className="w-8 h-8 border border-border flex items-center justify-center hover:border-primary text-muted-foreground hover:text-foreground transition-colors bg-transparent cursor-pointer"
                                 aria-label="Diminuer la quantité"
                               >
                                 <Minus className="w-3.5 h-3.5" />
                               </button>
-                              <span className="w-8 text-center text-xs font-semibold font-mono text-foreground">
+                              <span className="w-8 text-center text-sm font-medium text-foreground">
                                 {item.quantity}
                               </span>
                               <button
                                 onClick={() => updateQuantity(item.id, 1)}
-                                className="w-8 h-8 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-[#F5F3EE]/30 active:bg-[#F5F3EE]/60 transition-colors rounded-none border-none cursor-pointer"
+                                className="w-8 h-8 border border-border flex items-center justify-center hover:border-primary text-muted-foreground hover:text-foreground transition-colors bg-transparent cursor-pointer"
                                 aria-label="Augmenter la quantité"
                               >
                                 <Plus className="w-3.5 h-3.5" />
                               </button>
                             </div>
 
-                            {/* Price */}
-                            <span className="font-serif text-lg text-foreground font-light min-w-[100px] text-right">
+                            {/* Price: "890 MAD" */}
+                            <span className="font-serif text-lg text-foreground font-light min-w-[90px] text-right">
                               {formatPrice(item.price * item.quantity)}
                             </span>
 
@@ -199,48 +194,50 @@ export default function CartPage() {
                         </div>
 
                       </div>
+
+                      {/* Divider: h-px bg-border my-6 */}
+                      <div className="h-px bg-border my-6" />
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Right Column: Checkout Summary (col-span-4) */}
-              <div
-                className={`md:col-span-4 md:sticky md:top-32 transition-all duration-700 ease-out transform delay-150 ${
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                }`}
-              >
+              {/* Right Column: Summary (sticky) (col-span-4) */}
+              <div className="md:col-span-4 md:sticky md:top-32">
                 <div className="bg-muted p-8 text-left space-y-6">
-                  <h2 className="font-serif text-2xl text-foreground font-normal pb-3 border-b border-border/40">
+                  {/* "Résumé" font-serif text-2xl */}
+                  <h2 className="font-serif text-2xl text-foreground font-normal pb-3 border-b border-border">
                     Résumé
                   </h2>
 
-                  {/* Summary details */}
-                  <div className="space-y-4 text-sm font-light text-muted-foreground">
-                    <div className="flex justify-between">
-                      <span>Sous-total</span>
-                      <span className="text-foreground font-medium">{formatPrice(subtotal)}</span>
-                    </div>
-                    <div className="flex justify-between border-t border-border/20 pt-3">
-                      <span>Livraison</span>
-                      <span className="text-foreground/80 font-normal">Offerte</span>
-                    </div>
-                    <p className="text-[11px] text-muted-foreground/80 font-light italic leading-normal border-b border-border/40 pb-4">
-                      Taxes locales incluses. Les frais douaniers ou d&apos;expédition ne s&apos;appliquent pas.
-                    </p>
+                  {/* Sous-total line */}
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Sous-total</span>
+                    <span className="text-foreground font-medium">{formatPrice(subtotal)}</span>
                   </div>
 
-                  {/* Total */}
+                  {/* Livraison: "Calculée à l'étape suivante" text-sm text-muted-foreground */}
+                  <div className="flex justify-between items-start text-sm">
+                    <span className="text-muted-foreground">Livraison</span>
+                    <span className="text-sm text-muted-foreground text-right">
+                      Calculée à l&apos;étape suivante
+                    </span>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="h-px bg-border" />
+
+                  {/* Total: font-serif text-xl */}
                   <div className="flex justify-between items-baseline py-2">
-                    <span className="font-sans font-bold text-xs uppercase tracking-wider text-foreground">
+                    <span className="text-xs uppercase tracking-wider font-semibold text-foreground">
                       Total
                     </span>
-                    <span className="font-serif text-2xl text-foreground font-normal">
+                    <span className="font-serif text-xl text-foreground">
                       {formatPrice(subtotal)}
                     </span>
                   </div>
 
-                  {/* Checkout Actions */}
+                  {/* Button: w-full bg-primary text-white py-4 "Procéder au paiement" */}
                   <div className="space-y-4 pt-2">
                     <button
                       onClick={handleCheckout}
@@ -276,16 +273,16 @@ export default function CartPage() {
                       )}
                     </button>
 
-                    {/* Trust Stripe badge */}
-                    <div className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest text-muted-foreground/80 font-semibold pt-1">
-                      <ShieldCheck className="w-4 h-4 text-primary" />
-                      <span>Paiement sécurisé par Stripe</span>
+                    {/* "Paiement sécurisé par Stripe" text-xs text-muted-foreground text-center mt-3 */}
+                    <div className="text-xs text-muted-foreground text-center mt-3">
+                      Paiement sécurisé par Stripe
                     </div>
 
-                    <div className="border-t border-border/20 pt-4 text-center">
+                    {/* "← Continuer mes achats" text-primary text-sm mt-4 */}
+                    <div className="text-center pt-4">
                       <Link
                         href="/lunettes"
-                        className="text-xs uppercase tracking-widest text-primary hover:text-[#965628] hover:underline font-semibold transition-colors"
+                        className="text-primary text-sm hover:underline inline-block mt-4"
                       >
                         ← Continuer mes achats
                       </Link>
