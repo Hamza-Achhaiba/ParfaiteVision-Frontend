@@ -149,9 +149,9 @@ export function Header() {
 
         {/* Right Action Icons */}
         <div className="flex items-center gap-2">
-          <button className="p-2 hover:opacity-70 transition-opacity" aria-label="Panier">
+          <Link href="/panier" className="p-2 hover:opacity-70 transition-opacity" aria-label="Panier">
             <ShoppingBag className="w-5 h-5 text-primary-foreground" />
-          </button>
+          </Link>
 
           <button
             className="p-2 hover:opacity-70 transition-opacity md:hidden"
