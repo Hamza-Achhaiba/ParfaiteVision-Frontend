@@ -83,12 +83,12 @@ const navItems: NavItem[] = [
   },
   {
     label: "Contact",
-    href: "/#contact",
+    href: "/contact",
     isDropdown: true,
     dropdownType: "contact",
     subItems: [
-      { label: "Nous trouver", href: "/#contact" },
-      { label: "Horaires", href: "/#contact" },
+      { label: "Nous trouver", href: "/contact" },
+      { label: "Horaires", href: "/contact" },
       { label: "Téléphone", href: "tel:+212524475555" },
     ]
   },
