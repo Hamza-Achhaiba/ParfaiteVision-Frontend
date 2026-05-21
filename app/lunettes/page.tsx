@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, Suspense } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
@@ -457,7 +458,7 @@ export default function LunettesPage() {
 
 function ProductCard({ product, index }: { product: Product; index: number }) {
   const [isVisible, setIsVisible] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     const currentRef = ref.current
@@ -487,8 +488,9 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
   }, [])
 
   return (
-    <div
+    <Link
       ref={ref}
+      href={`/lunettes/${product.id}`}
       className={`group block transition-all duration-700 ease-out transform ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
       }`}
@@ -519,6 +521,6 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           {product.price}
         </p>
       </div>
-    </div>
+    </Link>
   )
 }
