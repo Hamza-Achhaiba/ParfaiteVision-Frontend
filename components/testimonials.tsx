@@ -27,6 +27,7 @@ export function Testimonials() {
   const [transitionState, setTransitionState] = useState<'idle' | 'leaving' | 'entering'>('idle')
   const [inView, setInView] = useState(false)
   const [hasAnimatedIn, setHasAnimatedIn] = useState(false)
+  const [resetKey, setResetKey] = useState(0)
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -73,9 +74,22 @@ export function Testimonials() {
     }
   }, [transitionState])
 
+  // Autoplay effect
+  useEffect(() => {
+    if (!inView || transitionState !== 'idle') return
+
+    const timer = setInterval(() => {
+      const nextIndex = (current + 1) % testimonials.length
+      handleSwitch(nextIndex)
+    }, 6000)
+
+    return () => clearInterval(timer)
+  }, [current, inView, resetKey, transitionState])
+
   const handleSwitch = (targetIndex: number) => {
     if (targetIndex === current || transitionState !== 'idle') return
 
+    setResetKey(prev => prev + 1)
     setTransitionState('leaving')
 
     // Wait for leaving animation (300ms)

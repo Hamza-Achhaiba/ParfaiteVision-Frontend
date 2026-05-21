@@ -24,6 +24,7 @@ export function Hero() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const [isFading, setIsFading] = useState(false)
+  const [resetKey, setResetKey] = useState(0)
   const sectionRef = useRef<HTMLElement>(null)
 
   // Initial fade in on mount
@@ -50,7 +51,20 @@ export function Hero() {
     return () => observer.disconnect()
   }, [])
 
+  // Autoplay effect
+  useEffect(() => {
+    if (isFading) return
+
+    const timer = setInterval(() => {
+      const newIndex = (currentIndex + 1) % heroImages.length
+      changeImage(newIndex)
+    }, 5000)
+
+    return () => clearInterval(timer)
+  }, [currentIndex, isFading, resetKey])
+
   const changeImage = (newIndex: number) => {
+    setResetKey(prev => prev + 1)
     setIsFading(true)
     setTimeout(() => {
       setCurrentIndex(newIndex)
