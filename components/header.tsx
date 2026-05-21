@@ -52,9 +52,10 @@ const navItems: NavItem[] = [
     isDropdown: true,
     dropdownType: "lunettes",
     subItems: [
-      { label: "Lunettes de vue", href: "/collection/vue" },
-      { label: "Lunettes de soleil", href: "/collection/solaires" },
-      { label: "Lunettes enfant", href: "/collection/enfant" },
+      { label: "Lunettes de vue", href: "/lunettes?category=vue" },
+      { label: "Lunettes de soleil", href: "/lunettes?category=solaires" },
+      { label: "Lentilles", href: "/lunettes?category=lentilles" },
+      { label: "Lunettes enfant", href: "/lunettes?category=enfant" },
     ]
   },
   {
@@ -244,7 +245,7 @@ function HeaderDropdown({ item }: { item: NavItem }) {
         <ChevronDown className={`w-4 h-4 transition-transform duration-300 ease-out ${isHovered ? "rotate-180" : ""}`} />
       </Link>
 
-      {/* Lunettes Dropdown: w-[500px], 2x2 grid (renders 3 items) */}
+      {/* Lunettes Dropdown: w-[500px], 2x2 grid (renders 4 items) */}
       {item.dropdownType === "lunettes" && (
         <div
           className={`absolute top-full left-1/2 -translate-x-1/2 bg-background border border-border shadow-xl z-50 rounded-none overflow-hidden transition-all
