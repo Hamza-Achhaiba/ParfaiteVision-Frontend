@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ShoppingBag, ChevronDown, Menu, X } from "lucide-react"
+import { ShoppingBag, ChevronDown, Menu, X, User } from "lucide-react"
 
 interface NavSubItem {
   label: string;
@@ -149,6 +149,10 @@ export function Header() {
 
         {/* Right Action Icons */}
         <div className="flex items-center gap-2">
+          <Link href="/compte" className="p-2 hover:opacity-70 transition-opacity" aria-label="Mon compte">
+            <User className="w-5 h-5 text-primary-foreground" />
+          </Link>
+
           <Link href="/panier" className="p-2 hover:opacity-70 transition-opacity" aria-label="Panier">
             <ShoppingBag className="w-5 h-5 text-primary-foreground" />
           </Link>
