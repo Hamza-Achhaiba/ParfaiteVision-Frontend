@@ -112,10 +112,10 @@ interface Product {
 // 2. Parser to map image files to standard Product objects
 function parseProduct(filename: string, category: "vue" | "solaires" | "lentilles" | "enfant"): Product {
   const base = filename.replace(/\.(jpg|jpeg|png)$/i, "")
-  
+
   let brand = ""
   let name = ""
-  
+
   if (base.startsWith("ray-ban-junior-")) {
     brand = "Ray-Ban Junior"
     name = base.replace("ray-ban-junior-", "")
@@ -174,12 +174,12 @@ function parseProduct(filename: string, category: "vue" | "solaires" | "lentille
       name = base
     }
   }
-  
+
   brand = brand
     .split(" ")
     .map(w => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ")
-    
+
   name = name
     .split("-")
     .map(w => w.charAt(0).toUpperCase() + w.slice(1))
@@ -240,7 +240,7 @@ function parseProduct(filename: string, category: "vue" | "solaires" | "lentille
     gender = "Femme"
   }
 
-  const description = category === "lentilles" 
+  const description = category === "lentilles"
     ? "Lentilles de contact de dernière génération offrant un confort exceptionnel tout au long de la journée. Grâce à leur technologie d'hydratation avancée, elles permettent une excellente oxygénation de l'œil pour un regard frais et sain du matin au soir."
     : `Découvrez cette monture ${brand} raffinée, conçue pour allier confort optimal et élégance intemporelle. Chaque détail témoigne du savoir-faire artisanal emblématique de la maison, offrant une durabilité et une précision de vision exceptionnelles au quotidien.`
 
@@ -284,7 +284,7 @@ export default function ProductDetailPage({ params }: PageProps) {
     const timeout = setTimeout(() => {
       setIsVisible(true)
     }, 50)
-    
+
     return () => clearTimeout(timeout)
   }, [slug])
 
@@ -322,12 +322,11 @@ export default function ProductDetailPage({ params }: PageProps) {
         className="flex-grow max-w-6xl mx-auto px-6 py-16 md:py-24 w-full"
       >
         <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
-          
+
           {/* Left Column: Image with slide-in animation */}
           <div
-            className={`relative aspect-[4/5] w-full bg-muted overflow-hidden border border-border/40 transition-all duration-[800ms] ease-out transform ${
-              isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
-            }`}
+            className={`relative aspect-[4/5] w-full bg-muted overflow-hidden border border-border/40 transition-all duration-[800ms] ease-out transform ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
+              }`}
           >
             <Image
               src={product.image}
@@ -343,9 +342,8 @@ export default function ProductDetailPage({ params }: PageProps) {
           <div className="space-y-8">
             {/* Category & Brand */}
             <div
-              className={`transition-all duration-600 ease-out transform delay-75 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
+              className={`transition-all duration-600 ease-out transform delay-75 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                }`}
             >
               <span className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">
                 {product.brand}
@@ -354,9 +352,8 @@ export default function ProductDetailPage({ params }: PageProps) {
 
             {/* Title & Price */}
             <div
-              className={`space-y-3 transition-all duration-600 ease-out transform delay-150 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
+              className={`space-y-3 transition-all duration-600 ease-out transform delay-150 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                }`}
             >
               <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground font-normal leading-tight">
                 {product.name}
@@ -368,9 +365,8 @@ export default function ProductDetailPage({ params }: PageProps) {
 
             {/* Description & Stock */}
             <div
-              className={`space-y-4 transition-all duration-600 ease-out transform delay-[225ms] ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
+              className={`space-y-4 transition-all duration-600 ease-out transform delay-[225ms] ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                }`}
             >
               <div className="flex items-center gap-2">
                 <span className="inline-block w-2.5 h-2.5 bg-secondary"></span>
@@ -385,9 +381,8 @@ export default function ProductDetailPage({ params }: PageProps) {
 
             {/* Attributes List */}
             <div
-              className={`border-t border-b border-border/60 py-6 space-y-4 transition-all duration-600 ease-out transform delay-[300ms] ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
+              className={`border-t border-b border-border/60 py-6 space-y-4 transition-all duration-600 ease-out transform delay-[300ms] ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                }`}
             >
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Matériau</span>
@@ -405,9 +400,8 @@ export default function ProductDetailPage({ params }: PageProps) {
 
             {/* Add to Basket Button */}
             <div
-              className={`transition-all duration-600 ease-out transform delay-[375ms] ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
+              className={`transition-all duration-600 ease-out transform delay-[375ms] ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                }`}
             >
               <button className="w-full bg-primary text-white py-4.5 font-semibold uppercase tracking-widest text-xs hover:bg-[#965628] transition-colors rounded-none cursor-pointer">
                 Ajouter au panier
@@ -418,9 +412,8 @@ export default function ProductDetailPage({ params }: PageProps) {
 
             {/* Trust Badges */}
             <div
-              className={`grid grid-cols-3 gap-2 py-2 text-center text-[10px] uppercase tracking-widest text-muted-foreground transition-all duration-600 ease-out transform delay-[450ms] ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
+              className={`grid grid-cols-3 gap-2 py-2 text-center text-[10px] uppercase tracking-widest text-muted-foreground transition-all duration-600 ease-out transform delay-[450ms] ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                }`}
             >
               <div className="space-y-1">
                 <p className="font-semibold text-foreground">Livraison</p>
@@ -494,9 +487,8 @@ function ProductCard({ product, index }: { product: Omit<Product, "material" | "
     <Link
       ref={ref}
       href={`/lunettes/${product.id}`}
-      className={`group block transition-all duration-700 ease-out transform ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-      }`}
+      className={`group block transition-all duration-700 ease-out transform ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+        }`}
       style={{
         transitionDelay: `${(index % 4) * 80}ms`,
       }}

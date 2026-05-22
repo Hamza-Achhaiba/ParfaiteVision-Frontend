@@ -63,7 +63,7 @@ export default function CartPage() {
 
   // Calculate totals
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
-  
+
   const formatPrice = (value: number) => {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " MAD"
   }
@@ -84,9 +84,8 @@ export default function CartPage() {
         {cartItems.length === 0 ? (
           /* Empty Cart State */
           <div
-            className={`max-w-md mx-auto text-center py-20 px-6 transition-all duration-[600ms] transform ${
-              isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
-            }`}
+            className={`max-w-md mx-auto text-center py-20 px-6 transition-all duration-[600ms] transform ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              }`}
           >
             <h1 className="font-serif text-3xl text-center text-foreground mb-2">
               Votre panier est vide
@@ -104,9 +103,8 @@ export default function CartPage() {
         ) : (
           /* Cart with Items layout */
           <div
-            className={`space-y-10 transition-all duration-700 ease-out transform ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
+            className={`space-y-10 transition-all duration-700 ease-out transform ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
           >
             {/* Title */}
             <div>
@@ -120,14 +118,14 @@ export default function CartPage() {
 
             {/* Grid Container */}
             <div className="grid md:grid-cols-12 gap-12 items-start">
-              
+
               {/* Left Column: Items List (col-span-8) */}
               <div className="md:col-span-8">
                 <div className="border-t border-border">
                   {cartItems.map((item) => (
                     <div key={item.id} className="text-left">
                       <div className="flex gap-6 items-center py-6">
-                        
+
                         {/* Image: w-24 aspect-square object-cover bg-muted */}
                         <div className="relative w-24 aspect-square bg-muted flex-shrink-0 overflow-hidden">
                           <Image
@@ -163,7 +161,7 @@ export default function CartPage() {
 
                           {/* Quantity & Price */}
                           <div className="flex items-center justify-between sm:justify-end gap-8">
-                            
+
                             {/* Quantity: [ - ] number [ + ] (w-8 h-8 border buttons) */}
                             <div className="flex items-center gap-2">
                               <button
