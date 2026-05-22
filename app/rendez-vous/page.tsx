@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Calendar, Clock, MapPin, Phone, Mail, Info, Check, AlertCircle } from "lucide-react"
@@ -129,11 +130,11 @@ export default function AppointmentPage() {
               isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
-            <div className="w-16 h-16 bg-primary/10 rounded-none flex items-center justify-center mx-auto mb-8 border border-primary/30">
-              <Check className="w-8 h-8 text-primary" />
+            <div className="w-16 h-16 bg-[#6B8F71]/10 rounded-none flex items-center justify-center mx-auto mb-8 border border-[#6B8F71]/30">
+              <Check className="w-8 h-8 text-[#6B8F71]" />
             </div>
-            <h1 className="font-serif text-3xl text-foreground font-normal mb-4">
-              Rendez-vous Confirmé
+            <h1 className="font-serif text-xl text-[#6B8F71] font-normal mb-4">
+              Votre rendez-vous a été enregistré avec succès !
             </h1>
             <p className="text-muted-foreground text-sm leading-relaxed mb-8">
               Merci M./Mme <strong className="text-foreground">{name}</strong>. Votre rendez-vous pour un{" "}
@@ -167,20 +168,28 @@ export default function AppointmentPage() {
                 </div>
               )}
             </div>
-            <button
-              onClick={() => {
-                setIsSuccess(false)
-                setName("")
-                setPhone("")
-                setEmail("")
-                setDate("")
-                setSelectedSlot("")
-                setNotes("")
-              }}
-              className="bg-primary text-white px-8 py-3.5 font-semibold uppercase tracking-widest text-xs hover:bg-[#965628] transition-colors rounded-none cursor-pointer"
-            >
-              Prendre un autre rendez-vous
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
+              <Link
+                href="/mes-rendez-vous"
+                className="bg-[#B56E3A] text-white px-6 py-3 font-semibold uppercase tracking-widest text-xs hover:bg-[#9A5A2E] transition-colors duration-200 rounded-none text-center"
+              >
+                Voir mes rendez-vous
+              </Link>
+              <button
+                onClick={() => {
+                  setIsSuccess(false)
+                  setName("")
+                  setPhone("")
+                  setEmail("")
+                  setDate("")
+                  setSelectedSlot("")
+                  setNotes("")
+                }}
+                className="border border-[#B56E3A] text-[#B56E3A] hover:bg-[#B56E3A] hover:text-white px-6 py-3 font-semibold uppercase tracking-widest text-xs transition-colors duration-200 rounded-none cursor-pointer text-center"
+              >
+                Prendre un autre rendez-vous
+              </button>
+            </div>
           </div>
         ) : (
           /* Booking Layout */
@@ -200,6 +209,14 @@ export default function AppointmentPage() {
                 <p className="text-muted-foreground text-sm sm:text-base font-light">
                   Nos opticiens vous accueillent sur rendez-vous pour un accompagnement sur-mesure.
                 </p>
+                <div>
+                  <Link
+                    href="/mes-rendez-vous"
+                    className="font-sans text-sm text-[#B56E3A] underline hover:text-[#9A5A2E] transition-colors duration-200"
+                  >
+                    Déjà un rendez-vous ? Consultez vos rendez-vous
+                  </Link>
+                </div>
               </div>
 
               {/* Booking Form Card */}

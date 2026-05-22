@@ -95,7 +95,7 @@ const navItems: NavItem[] = [
     dropdownType: "rdv",
     subItems: [
       { label: "Prendre rendez-vous", href: "/rendez-vous" },
-      { label: "Mes rendez-vous", href: "/rendez-vous" },
+      { label: "Mes rendez-vous", href: "/mes-rendez-vous" },
     ]
   }
 ]
