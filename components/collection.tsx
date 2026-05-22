@@ -5,22 +5,22 @@ const categories = [
   {
     name: "Lunettes de vue",
     image: "/images/lunettes-vue.jpg",
-    href: "/collection/vue",
+    href: "/lunettes?category=vue",
   },
   {
-    name: "Solaires",
+    name: "Lunettes de soleil",
     image: "/images/solaires.jpg",
-    href: "/collection/solaires",
+    href: "/lunettes?category=solaires",
   },
   {
     name: "Lentilles",
     image: "/images/lentilles.jpg",
-    href: "/collection/lentilles",
+    href: "/lunettes?category=lentilles",
   },
   {
-    name: "Enfant",
+    name: "Lunettes enfant",
     image: "/images/enfant.jpg",
-    href: "/collection/enfant",
+    href: "/lunettes?category=enfant",
   },
 ]
 
@@ -37,7 +37,7 @@ export function Collection() {
             <Link
               key={category.name}
               href={category.href}
-              className="group cursor-pointer block"
+              className="group cursor-pointer block transition-transform duration-300 hover:scale-[1.02]"
             >
               <div className="relative aspect-square bg-muted border border-transparent group-hover:border-border transition-colors overflow-hidden">
                 <Image
