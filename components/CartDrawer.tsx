@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { X, Trash2 } from "lucide-react"
-import { useCart, CartItem } from "@/hooks/useCart"
+import { useCart } from "@/hooks/useCart"
 
 // Hardcoded recommendations for "VOUS AIMEREZ AUSSI"
 const RECOMMENDATIONS = [
@@ -13,7 +14,7 @@ const RECOMMENDATIONS = [
     brand: "PARFAITE VISION",
     name: "CLIPZEN",
     price: 1150,
-    image: "/images/products/vue/moscot-zev-gold.jpg", // placeholder
+    image: "/images/products/vue/moscot-zev-gold.jpg",
     variant: "Accessoire / Unique"
   },
   {
@@ -21,7 +22,7 @@ const RECOMMENDATIONS = [
     brand: "MOSCOT",
     name: "MILTZEN SUN",
     price: 3700,
-    image: "/images/products/solaires/ray-ban-round-gold.jpg", // placeholder
+    image: "/images/products/solaires/ray-ban-round-gold.jpg",
     variant: "Couleur: Noir / Taille: Unique"
   },
   {
@@ -29,7 +30,7 @@ const RECOMMENDATIONS = [
     brand: "PARFAITE VISION",
     name: "ÉTUI DE VOYAGE",
     price: 350,
-    image: "/images/products/vue/moscot-billik-brown.jpg", // placeholder
+    image: "/images/products/vue/moscot-billik-brown.jpg",
     variant: "Accessoire / Unique"
   },
   {
@@ -37,23 +38,15 @@ const RECOMMENDATIONS = [
     brand: "PARFAITE VISION",
     name: "CORDON À LUNETTES",
     price: 90,
-    image: "/images/products/vue/moscot-zev-gold.jpg", // placeholder
+    image: "/images/products/vue/moscot-zev-gold.jpg",
     variant: "Accessoire / Unique"
-  },
-  {
-    id: "miltzen-blue-light",
-    brand: "MOSCOT",
-    name: "MILTZEN BLUE LIGHT",
-    price: 4400,
-    image: "/images/products/vue/moscot-billik-brown.jpg", // placeholder
-    variant: "Couleur: Crystal / Taille: 46"
   },
   {
     id: "snapback",
     brand: "PARFAITE VISION",
     name: "SNAPBACK",
     price: 400,
-    image: "/images/products/solaires/ray-ban-round-gold.jpg", // placeholder
+    image: "/images/products/solaires/ray-ban-round-gold.jpg",
     variant: "Accessoire / Unique"
   }
 ]
@@ -61,16 +54,21 @@ const RECOMMENDATIONS = [
 export function CartDrawer() {
   const { items, isDrawerOpen, setDrawerOpen, updateQuantity, removeItem, addItem } = useCart()
   const [isRendered, setIsRendered] = useState(false)
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false)
+  const router = useRouter()
 
   // Sync animation state with isDrawerOpen
   useEffect(() => {
     if (isDrawerOpen) {
       setIsRendered(true)
+      setIsAnimatingOut(false)
       document.body.style.overflow = "hidden"
     } else {
+      setIsAnimatingOut(true)
       const timer = setTimeout(() => {
         setIsRendered(false)
-      }, 300) // matches transition duration
+        setIsAnimatingOut(false)
+      }, 400) // matches slide-out/fade-out duration
       document.body.style.overflow = ""
       return () => clearTimeout(timer)
     }
@@ -90,36 +88,72 @@ export function CartDrawer() {
 
   // Total price calculations
   const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0)
-  const isFreeShipping = total > 1000
 
   // Format price
   const formatPrice = (value: number) => {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " MAD"
   }
 
+  // Handle commander button click with transition
+  const handleCommander = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setDrawerOpen(false)
+    setTimeout(() => {
+      router.push("/checkout")
+    }, 300)
+  }
+
+  const handleShare = () => {
+    if (typeof window !== "undefined") {
+      const dummyUrl = window.location.origin + "/panier"
+      navigator.clipboard.writeText(dummyUrl)
+      alert("Lien du panier copié !")
+    }
+  }
+
   return (
     <div className="fixed inset-0 z-[200] flex justify-end font-sans">
+      {/* Custom keyframes for stagger effect */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes pvStaggerFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(12px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .stagger-item-animate {
+          opacity: 0;
+          animation: pvStaggerFadeIn 450ms cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+        }
+      `}} />
+
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ${
-          isDrawerOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 bg-black transition-opacity duration-300 ease-out cursor-pointer ${
+          isDrawerOpen && !isAnimatingOut ? "opacity-50" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setDrawerOpen(false)}
       />
 
       {/* Drawer Container */}
       <div
-        className={`relative z-10 w-screen md:max-w-[650px] bg-[#FAFAF7] shadow-2xl h-full flex flex-col transition-transform duration-300 ${
-          isDrawerOpen ? "translate-x-0 ease-out" : "translate-x-full ease-in"
+        className={`relative z-10 w-screen md:max-w-[650px] bg-[#FAFAF7] shadow-2xl h-full flex flex-col transition-transform ${
+          isDrawerOpen && !isAnimatingOut
+            ? "translate-x-0 duration-400 ease-[cubic-bezier(0.32,0.72,0,1)]"
+            : "translate-x-full duration-300 ease-in"
         }`}
       >
         {/* Header */}
         <div className="p-6 border-b border-[#1A1A1A]/10 flex items-center justify-between bg-[#FAFAF7]">
           <div className="flex items-center gap-3">
-            <h2 className="text-lg font-bold tracking-widest text-[#1A1A1A] uppercase font-sans">
+            <h2 className="text-sm font-bold tracking-widest text-[#1A1A1A] uppercase font-sans">
               Votre panier
             </h2>
-            <span className="bg-[#1A1A1A] text-white text-xs font-semibold w-6 h-6 flex items-center justify-center rounded-full font-sans">
+            <span className="bg-[#1A1A1A] text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full font-sans">
               {itemsCount}
             </span>
           </div>
@@ -131,24 +165,6 @@ export function CartDrawer() {
             <X className="w-5 h-5" />
           </button>
         </div>
-
-        {/* Free Shipping Banner */}
-        {isFreeShipping ? (
-          <div className="bg-[#1A1A1A] text-white text-sm font-semibold p-3 text-center uppercase tracking-wider font-sans transition-all duration-300">
-            ✓ Livraison express offerte dans le monde entier !
-            <div className="w-full bg-[#B56E3A] h-1.5 mt-2" />
-          </div>
-        ) : (
-          <div className="bg-[#FAFAF7] border-b border-[#1A1A1A]/5 p-3 text-center text-xs text-[#1A1A1A]/70 uppercase tracking-wider font-sans">
-            Plus que {formatPrice(1000 - total)} pour la livraison offerte !
-            <div className="w-full bg-[#1A1A1A]/10 h-1.5 mt-2 overflow-hidden">
-              <div 
-                className="bg-[#B56E3A] h-full transition-all duration-300"
-                style={{ width: `${Math.min(100, (total / 1000) * 100)}%` }}
-              />
-            </div>
-          </div>
-        )}
 
         {/* Scrollable Content (Responsive Column Grid) */}
         <div className="flex-grow overflow-hidden flex flex-col md:grid md:grid-cols-12">
@@ -166,8 +182,12 @@ export function CartDrawer() {
                 </Link>
               </div>
             ) : (
-              items.map((item) => (
-                <div key={`${item.id}-${item.variant}`} className="flex gap-4 items-start text-left">
+              items.map((item, index) => (
+                <div
+                  key={`${item.id}-${item.variant}`}
+                  className="flex gap-4 items-start text-left stagger-item-animate"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
                   {/* Image container */}
                   <div className="relative w-20 h-20 bg-white border border-[#1A1A1A]/10 rounded-none overflow-hidden flex-shrink-0">
                     <Image
@@ -182,19 +202,22 @@ export function CartDrawer() {
                   {/* Details */}
                   <div className="flex-grow min-w-0 space-y-1">
                     <div className="flex justify-between items-start gap-2">
-                      <h3 className="font-bold text-xs uppercase tracking-wider text-[#1A1A1A] truncate">
+                      <h3 className="font-bold text-sm uppercase tracking-wider text-[#1A1A1A] truncate font-sans">
                         {item.name}
                       </h3>
-                      <span className="font-bold text-xs text-[#1A1A1A] whitespace-nowrap ml-auto">
+                      <span className="font-bold text-sm text-[#1A1A1A] whitespace-nowrap ml-auto font-sans">
                         {formatPrice(item.price * item.quantity)}
                       </span>
                     </div>
-                    <p className="text-[10px] text-[#1A1A1A]/50 font-semibold uppercase tracking-widest mt-0.5">
-                      {item.brand}
-                    </p>
-                    <p className="text-[11px] text-[#1A1A1A]/60 font-sans">
-                      {item.variant}
-                    </p>
+                    {/* Brand details removed, keeping layout clean as requested */}
+                    {item.variant.split('/').map((variantPart, pIdx) => {
+                      const cleanPart = variantPart.trim()
+                      return (
+                        <p key={pIdx} className="text-xs text-[#1A1A1A]/60 font-sans">
+                          {cleanPart}
+                        </p>
+                      )
+                    })}
 
                     {/* Actions Row */}
                     <div className="flex items-center justify-between pt-2">
@@ -207,7 +230,7 @@ export function CartDrawer() {
                         >
                           –
                         </button>
-                        <span className="w-7 text-center text-xs font-semibold text-[#1A1A1A] select-none">
+                        <span className="w-7 text-center text-xs font-semibold text-[#1A1A1A] select-none font-sans">
                           {item.quantity}
                         </span>
                         <button
@@ -237,7 +260,7 @@ export function CartDrawer() {
 
           {/* Right Column: Recommendations (Scrollable) */}
           <div className="h-64 md:h-full md:col-span-5 overflow-y-auto p-6 bg-[#F0EDE8]/30 space-y-4">
-            <h4 className="text-[10px] font-bold tracking-[0.2em] text-[#1A1A1A]/60 uppercase border-b border-[#1A1A1A]/10 pb-2 text-left font-sans">
+            <h4 className="text-xs font-bold tracking-[0.2em] text-[#1A1A1A]/60 uppercase border-b border-[#1A1A1A]/10 pb-2 text-left font-sans">
               Vous aimerez aussi
             </h4>
             <div className="space-y-4">
@@ -246,21 +269,21 @@ export function CartDrawer() {
                 return (
                   <div key={rec.id} className="flex gap-3 items-center text-left">
                     {/* Tiny thumbnail */}
-                    <div className="relative w-12 h-12 bg-white border border-[#1A1A1A]/10 rounded-none overflow-hidden flex-shrink-0">
+                    <div className="relative w-[60px] h-[60px] bg-white border border-[#1A1A1A]/10 rounded-none overflow-hidden flex-shrink-0">
                       <Image
                         src={rec.image}
                         alt={rec.name}
                         fill
-                        sizes="48px"
+                        sizes="60px"
                         className="object-cover w-full h-full"
                       />
                     </div>
                     {/* Text */}
                     <div className="flex-grow min-w-0">
-                      <h5 className="font-bold text-[10px] uppercase tracking-wider text-[#1A1A1A] truncate">
+                      <h5 className="font-bold text-xs uppercase tracking-wider text-[#1A1A1A] truncate font-sans">
                         {rec.name}
                       </h5>
-                      <span className="text-[11px] font-medium text-[#1A1A1A]/70">
+                      <span className="text-sm font-medium text-[#1A1A1A]/70 font-sans">
                         {formatPrice(rec.price)}
                       </span>
                     </div>
@@ -297,34 +320,27 @@ export function CartDrawer() {
         {/* Footer */}
         <div className="p-6 border-t border-[#1A1A1A]/10 bg-[#FAFAF7] space-y-4">
           {/* Quick links */}
-          <div className="flex justify-between text-[11px] font-bold tracking-wider font-sans">
+          <div className="flex justify-start text-xs font-bold tracking-wider font-sans">
             <button
-              onClick={() => {
-                const dummyUrl = window.location.origin + "/panier"
-                navigator.clipboard.writeText(dummyUrl)
-                alert("Lien du panier copié !")
-              }}
+              onClick={handleShare}
               className="underline uppercase text-[#1A1A1A]/80 hover:text-[#1A1A1A] border-none bg-transparent cursor-pointer font-sans"
             >
-              🔗 Partager panier
+              Partager panier
             </button>
-            <span className="underline uppercase text-[#1A1A1A]/80 hover:text-[#1A1A1A] cursor-pointer font-sans">
-              🏷️ Réduction (0)
-            </span>
           </div>
 
           <div className="h-px bg-[#1A1A1A]/10" />
 
           {/* Totals */}
           <div className="flex justify-between items-baseline font-sans">
-            <span className="text-sm font-bold text-[#1A1A1A] uppercase tracking-wider">
+            <span className="text-lg font-bold text-[#1A1A1A] uppercase tracking-wider">
               Total
             </span>
-            <span className="text-xl font-bold text-[#1A1A1A]">
+            <span className="text-lg font-bold text-[#1A1A1A]">
               {formatPrice(total)}
             </span>
           </div>
-          <p className="text-[10px] text-[#1A1A1A]/40 text-left font-sans">
+          <p className="text-xs text-[#1A1A1A]/40 text-left font-sans">
             Taxes et livraison calculés à la caisse
           </p>
 
@@ -333,17 +349,16 @@ export function CartDrawer() {
             <Link
               href="/panier"
               onClick={() => setDrawerOpen(false)}
-              className="flex-1 text-center border-2 border-[#1A1A1A] text-[#1A1A1A] bg-transparent hover:bg-[#1A1A1A] hover:text-white py-3 uppercase tracking-widest text-xs font-bold rounded-none transition-all duration-200"
+              className="flex-1 text-center border-2 border-[#1A1A1A] text-[#1A1A1A] bg-transparent hover:bg-[#1A1A1A] hover:text-white py-3 uppercase tracking-widest text-sm font-bold rounded-none transition-all duration-200 font-sans"
             >
               Voir panier
             </Link>
-            <Link
-              href="/checkout"
-              onClick={() => setDrawerOpen(false)}
-              className="flex-1 text-center bg-[#B56E3A] text-white hover:bg-[#9A5A2E] py-3 uppercase tracking-widest text-xs font-bold rounded-none transition-all duration-200"
+            <button
+              onClick={handleCommander}
+              className="flex-1 text-center bg-[#B56E3A] text-white hover:bg-[#9A5A2E] py-3 uppercase tracking-widest text-sm font-bold rounded-none transition-all duration-200 border-none cursor-pointer font-sans"
             >
               Commander
-            </Link>
+            </button>
           </div>
         </div>
       </div>
