@@ -24,26 +24,7 @@ interface CartState {
 export const useCart = create<CartState>()(
   persist(
     (set) => ({
-      items: [
-        {
-          id: "vue-moscot-miltzen",
-          brand: "MOSCOT",
-          name: "MILTZEN",
-          price: 340, // 340 MAD * 2 = 680 MAD
-          image: "/images/products/vue/moscot-zev-gold.jpg", // placeholder available image
-          quantity: 2,
-          variant: "Couleur: Écaille / Taille: 46"
-        },
-        {
-          id: "vue-moscot-billik-brown",
-          brand: "MOSCOT",
-          name: "BILLIK",
-          price: 340, // 340 MAD * 1 = 340 MAD
-          image: "/images/products/vue/moscot-billik-brown.jpg", // placeholder available image
-          quantity: 1,
-          variant: "Couleur: Crystal / Taille: 47"
-        }
-      ],
+      items: [],
       isDrawerOpen: false,
       addItem: (newItem) => set((state) => {
         const existingIndex = state.items.findIndex(

@@ -172,13 +172,13 @@ export function CartDrawer() {
           <div className="flex-grow md:col-span-7 overflow-y-auto p-6 space-y-6 border-b md:border-b-0 md:border-r border-[#1A1A1A]/10">
             {items.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center py-12">
-                <p className="text-[#1A1A1A]/60 text-sm font-sans mb-4">Votre panier est vide.</p>
+                <p className="text-[#1A1A1A]/60 text-sm font-sans mb-4">Votre panier est vide</p>
                 <Link
                   href="/lunettes"
                   onClick={() => setDrawerOpen(false)}
                   className="inline-block border border-[#1A1A1A] text-[#1A1A1A] px-6 py-2.5 text-xs font-semibold uppercase tracking-widest hover:bg-[#1A1A1A] hover:text-white transition-colors duration-200 rounded-none"
                 >
-                  Découvrir nos collections
+                  Continuer mes achats
                 </Link>
               </div>
             ) : (

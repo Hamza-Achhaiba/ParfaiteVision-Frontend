@@ -17,6 +17,7 @@ interface Appointment {
 }
 
 const INITIAL_APPOINTMENTS: Appointment[] = [
+  /*
   {
     id: "1",
     day: "Lun.",
@@ -44,6 +45,7 @@ const INITIAL_APPOINTMENTS: Appointment[] = [
     status: "past",
     location: "55 Rue Moulay Rachid, Essaouira"
   }
+  */
 ]
 
 export default function MesRendezVousPage() {

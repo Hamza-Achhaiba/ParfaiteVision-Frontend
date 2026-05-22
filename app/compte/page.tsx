@@ -24,49 +24,21 @@ interface Appointment {
   status: string
 }
 
-// Initial Sample Data
-const INITIAL_ORDERS: Order[] = [
-  {
-    id: "CMD-2026-9812",
-    date: "14 Mai 2026",
-    total: "890 MAD",
-    status: "Livré"
-  },
-  {
-    id: "CMD-2026-9743",
-    date: "02 Avril 2026",
-    total: "1 780 MAD",
-    status: "Livré"
-  }
-]
+const INITIAL_ORDERS: Order[] = []
 
-const INITIAL_APPOINTMENTS: Appointment[] = [
-  {
-    id: "RDV-7718",
-    date: "28 Mai 2026",
-    time: "10:30",
-    type: "Examen de vue",
-    status: "Confirmé"
-  },
-  {
-    id: "RDV-6691",
-    date: "12 Décembre 2025",
-    time: "15:00",
-    type: "Conseil personnalisé",
-    status: "Passé"
-  }
-]
+const INITIAL_APPOINTMENTS: Appointment[] = []
 
 export default function AccountPage() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [activeTab, setActiveTab] = useState<TabType>("commandes")
   const [orders, setOrders] = useState<Order[]>(INITIAL_ORDERS)
   const [appointments, setAppointments] = useState<Appointment[]>(INITIAL_APPOINTMENTS)
   
   const [profile, setProfile] = useState({
-    name: "Hamza",
-    phone: "+212 661 234567",
-    address: "55 Rue Moulay Rachid",
-    city: "Essaouira"
+    name: "",
+    phone: "",
+    address: "",
+    city: ""
   })
 
   const [isVisible, setIsVisible] = useState(false)
@@ -113,8 +85,32 @@ export default function AccountPage() {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
         >
-          {/* Header Section */}
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 border-b border-border pb-8">
+          {!isLoggedIn ? (
+            <div className="py-24 text-center space-y-6 max-w-md mx-auto">
+              <div className="w-12 h-12 bg-muted border border-border flex items-center justify-center mx-auto mb-4">
+                <User className="w-5 h-5 text-muted-foreground/60" />
+              </div>
+              <div className="space-y-2">
+                <h1 className="font-serif text-3xl text-foreground font-normal">
+                  Mon compte
+                </h1>
+                <p className="text-muted-foreground text-sm font-light">
+                  Connectez-vous pour accéder à votre compte
+                </p>
+              </div>
+              <div className="pt-4">
+                <Link
+                  href="/login"
+                  className="inline-block bg-primary text-white py-3 px-8 text-xs font-semibold uppercase tracking-widest hover:bg-[#965628] transition-colors rounded-none text-center"
+                >
+                  Se connecter
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Header Section */}
+              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 border-b border-border pb-8">
             <div>
               {/* Title: "Mon compte" font-serif text-3xl */}
               <h1 className="font-serif text-3xl text-foreground font-normal">
@@ -393,6 +389,8 @@ export default function AccountPage() {
               </div>
             )}
           </div>
+          </>
+          )}
         </div>
       </section>
 
