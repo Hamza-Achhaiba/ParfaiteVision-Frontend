@@ -4,13 +4,16 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { useCart } from "@/hooks/useCart"
 
 export default function CheckoutSuccessPage() {
   const [isVisible, setIsVisible] = useState(false)
+  const { clearCart } = useCart()
 
   useEffect(() => {
     setIsVisible(true)
-  }, [])
+    clearCart()
+  }, [clearCart])
 
   return (
     <main className="min-h-screen bg-[#FAFAF7] flex flex-col justify-between">

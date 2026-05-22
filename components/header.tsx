@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ShoppingBag, ChevronDown, Menu, X, User } from "lucide-react"
+import { useCart } from "@/hooks/useCart"
+import { CartDrawer } from "@/components/CartDrawer"
 
 interface NavSubItem {
   label: string;
@@ -107,6 +109,8 @@ const navItems: NavItem[] = [
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const { setDrawerOpen, items } = useCart()
+  const cartCount = items.reduce((acc, item) => acc + item.quantity, 0)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -153,9 +157,18 @@ export function Header() {
             <User className="w-5 h-5 text-primary-foreground" />
           </Link>
 
-          <Link href="/panier" className="p-2 hover:opacity-70 transition-opacity" aria-label="Panier">
+          <button
+            onClick={() => setDrawerOpen(true)}
+            className="p-2 hover:opacity-70 transition-opacity relative border-none bg-transparent cursor-pointer"
+            aria-label="Ouvrir le panier"
+          >
             <ShoppingBag className="w-5 h-5 text-primary-foreground" />
-          </Link>
+            {cartCount > 0 && (
+              <span className="absolute top-0.5 right-0.5 bg-[#B56E3A] text-white text-[9px] w-4.5 h-4.5 flex items-center justify-center rounded-full font-bold select-none leading-none">
+                {cartCount}
+              </span>
+            )}
+          </button>
 
           <button
             className="p-2 hover:opacity-70 transition-opacity md:hidden"
@@ -200,6 +213,7 @@ export function Header() {
           })}
         </div>
       </div>
+      <CartDrawer />
     </header>
   )
 }

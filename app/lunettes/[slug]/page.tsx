@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { useCart } from "@/hooks/useCart"
 
 // 1. List all image files first (identical dataset to catalogue)
 const VUE_IMAGES = [
@@ -274,6 +275,7 @@ export default function ProductDetailPage({ params }: PageProps) {
   const resolvedParams = use(params)
   const slug = resolvedParams.slug
   const product = ALL_PRODUCTS.find((p) => p.id === slug)
+  const { addItem, setDrawerOpen } = useCart()
 
   const [isVisible, setIsVisible] = useState(false)
   const mainSectionRef = useRef<HTMLDivElement>(null)
@@ -403,7 +405,21 @@ export default function ProductDetailPage({ params }: PageProps) {
               className={`transition-all duration-600 ease-out transform delay-[375ms] ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 }`}
             >
-              <button className="w-full bg-primary text-white py-4.5 font-semibold uppercase tracking-widest text-xs hover:bg-[#965628] transition-colors rounded-none cursor-pointer">
+              <button
+                onClick={() => {
+                  const priceVal = parseInt(product.price.replace(/[^\d]/g, ""), 10)
+                  addItem({
+                    id: product.id,
+                    brand: product.brand,
+                    name: product.name,
+                    price: priceVal,
+                    image: product.image,
+                    variant: `Couleur: ${product.color}`
+                  })
+                  setDrawerOpen(true)
+                }}
+                className="w-full bg-primary text-white py-4.5 font-semibold uppercase tracking-widest text-xs hover:bg-[#965628] transition-colors rounded-none cursor-pointer"
+              >
                 Ajouter au panier
               </button>
             </div>

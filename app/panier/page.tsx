@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Minus, Plus } from "lucide-react"
+import { useCart } from "@/hooks/useCart"
 
 interface CartItem {
   id: string
@@ -37,29 +38,13 @@ const INITIAL_ITEMS: CartItem[] = [
 ]
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>(INITIAL_ITEMS)
+  const { items: cartItems, updateQuantity, removeItem, setDrawerOpen } = useCart()
   const [isVisible, setIsVisible] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
 
   useEffect(() => {
     setIsVisible(true)
   }, [])
-
-  const updateQuantity = (id: string, delta: number) => {
-    setCartItems(prevItems =>
-      prevItems.map(item => {
-        if (item.id === id) {
-          const newQty = item.quantity + delta
-          return { ...item, quantity: Math.max(1, newQty) }
-        }
-        return item
-      })
-    )
-  }
-
-  const removeItem = (id: string) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id))
-  }
 
   // Calculate totals
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
@@ -72,8 +57,8 @@ export default function CartPage() {
     setIsProcessing(true)
     setTimeout(() => {
       setIsProcessing(false)
-      window.location.href = "/checkout/success"
-    }, 1000)
+      setDrawerOpen(true)
+    }, 500)
   }
 
   return (
@@ -235,7 +220,7 @@ export default function CartPage() {
                     </span>
                   </div>
 
-                  {/* Button: w-full bg-primary text-white py-4 "Procéder au paiement" */}
+                  {/* Button: w-full bg-primary text-white py-4 "Acheter maintenant" */}
                   <div className="space-y-4 pt-2">
                     <button
                       onClick={handleCheckout}
@@ -267,7 +252,7 @@ export default function CartPage() {
                           Traitement...
                         </>
                       ) : (
-                        "Procéder au paiement"
+                        "Acheter maintenant"
                       )}
                     </button>
 
