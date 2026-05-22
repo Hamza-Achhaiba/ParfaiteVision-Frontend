@@ -104,16 +104,19 @@ function TimelineRow({
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    const element = ref.current
+    if (!element) return
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setInView(true)
-          if (ref.current) observer.unobserve(ref.current)
+          observer.unobserve(entry.target)
         }
       },
       { threshold: 0.2 }
     )
-    if (ref.current) observer.observe(ref.current)
+    observer.observe(element)
     return () => observer.disconnect()
   }, [])
 
@@ -171,16 +174,19 @@ function TeamSection() {
   const ref = useRef<HTMLElement>(null)
 
   useEffect(() => {
+    const element = ref.current
+    if (!element) return
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setInView(true)
-          if (ref.current) observer.unobserve(ref.current)
+          observer.unobserve(entry.target)
         }
       },
       { threshold: 0.2 }
     )
-    if (ref.current) observer.observe(ref.current)
+    observer.observe(element)
     return () => observer.disconnect()
   }, [])
 
@@ -246,16 +252,19 @@ function BottomCTA() {
   const ref = useRef<HTMLElement>(null)
 
   useEffect(() => {
+    const element = ref.current
+    if (!element) return
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setInView(true)
-          if (ref.current) observer.unobserve(ref.current)
+          observer.unobserve(entry.target)
         }
       },
       { threshold: 0.2 }
     )
-    if (ref.current) observer.observe(ref.current)
+    observer.observe(element)
     return () => observer.disconnect()
   }, [])
 
